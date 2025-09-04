@@ -1,6 +1,6 @@
 # StackConnect
 
-🚀 **[Live Demo](https://stackconnect-r3qa.onrender.com/)** | 📖 **[Documentation](#usage)** | 🤝 **[Contributing](#contributing)**
+🚀 **[Live Demo](https://stackconnect-r3qa.onrender.com/)** 
 
 StackConnect is a **Django** web application designed to replicate and extend the core functionalities of Stack Overflow, enabling users to ask questions, post answers, vote, and interact seamlessly. It leverages the **Django REST Framework** for robust API endpoints, **Celery** and **RabbitMQ** for scalable asynchronous processing, and integrates modern UI elements with **Tailwind CSS**.
 
