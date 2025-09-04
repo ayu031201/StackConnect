@@ -3,7 +3,13 @@
 StackConnect is a **Django** web application designed to replicate and extend the core functionalities of Stack Overflow, enabling users to ask questions, post answers, vote, and interact seamlessly. It leverages the **Django REST Framework** for robust API endpoints, **Celery** and **RabbitMQ** for scalable asynchronous processing, and integrates modern UI elements with **Tailwind CSS**.
 
 ## Screenshots
-<img width="300" height="300" alt="image" src="https://github.com/user-attachments/assets/d7426031-3b9c-4a50-bbd5-53c0a08d7b71" />
+<img width="450" height="430" alt="image" src="https://github.com/user-attachments/assets/42061b77-c3cd-4eec-bc37-ceb740558a91" />
+<img width="450" height="480" alt="image" src="https://github.com/user-attachments/assets/2ada0f65-56e7-429e-b4a7-fc2c8eb5d528" />
+<img width="450" height="400" alt="image" src="https://github.com/user-attachments/assets/bab66739-2385-4e90-9e7b-f376f7e48304" />
+<img width="450" height="400" alt="image" src="https://github.com/user-attachments/assets/ae9d8e1e-a15e-4d7b-8c86-fd6db5b7e1a9" />
+<img width="450" height="450" alt="image" src="https://github.com/user-attachments/assets/11900fcf-49bd-4e6f-90ca-23238b30a770" />
+
+
 
 
 ## Features
@@ -94,10 +100,12 @@ stackconnect/
    - Create a `.env` file in the root directory
    - Add the necessary OAuth credentials for Stack Exchange API:
    ```env
-   STACK_EXCHANGE_CLIENT_ID=your_client_id
-   STACK_EXCHANGE_CLIENT_SECRET=your_client_secret
-   SECRET_KEY=your_django_secret_key
-   DEBUG=True
+   API_KEY= ""
+   CLIENT_ID= ""
+   CLIENT_SECRET= ""
+   EMAIL = ""
+   PASSWORD = ""
+   SECRET_KEY = ""
    ```
 
 5. **Apply database migrations**
