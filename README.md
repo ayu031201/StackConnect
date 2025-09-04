@@ -1,16 +1,24 @@
 # StackConnect
 
+🚀 **[Live Demo](https://stackconnect-r3qa.onrender.com/)** | 📖 **[Documentation](#usage)** | 🤝 **[Contributing](#contributing)**
+
 StackConnect is a **Django** web application designed to replicate and extend the core functionalities of Stack Overflow, enabling users to ask questions, post answers, vote, and interact seamlessly. It leverages the **Django REST Framework** for robust API endpoints, **Celery** and **RabbitMQ** for scalable asynchronous processing, and integrates modern UI elements with **Tailwind CSS**.
 
 ## Screenshots
-<img width="450" height="430" alt="image" src="https://github.com/user-attachments/assets/42061b77-c3cd-4eec-bc37-ceb740558a91" />
-<img width="450" height="480" alt="image" src="https://github.com/user-attachments/assets/2ada0f65-56e7-429e-b4a7-fc2c8eb5d528" />
-<img width="450" height="400" alt="image" src="https://github.com/user-attachments/assets/bab66739-2385-4e90-9e7b-f376f7e48304" />
-<img width="450" height="400" alt="image" src="https://github.com/user-attachments/assets/ae9d8e1e-a15e-4d7b-8c86-fd6db5b7e1a9" />
-<img width="450" height="450" alt="image" src="https://github.com/user-attachments/assets/11900fcf-49bd-4e6f-90ca-23238b30a770" />
 
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/42061b77-c3cd-4eec-bc37-ceb740558a91" alt="Home Page" width="400" height="350" />
+  <img src="https://github.com/user-attachments/assets/2ada0f65-56e7-429e-b4a7-fc2c8eb5d528" alt="Question Page" width="400" height="350" />
+</div>
 
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/bab66739-2385-4e90-9e7b-f376f7e48304" alt="Ask Question" width="400" height="350" />
+  <img src="https://github.com/user-attachments/assets/ae9d8e1e-a15e-4d7b-8c86-fd6db5b7e1a9" alt="User Profile" width="400" height="350" />
+</div>
 
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/11900fcf-49bd-4e6f-90ca-23238b30a770" alt="Dashboard" width="400" height="350" />
+</div>
 
 ## Features
 
