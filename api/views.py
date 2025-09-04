@@ -69,7 +69,7 @@ def stackexchange_callback(request):
         'client_id': os.getenv('CLIENT_ID'),
         'client_secret': os.getenv('CLIENT_SECRET'),
         'code': code,
-        'redirect_uri': 'https://stackconnect-kdb4.onrender.com/homepage/api/stackexchange/callback/'
+        'redirect_uri': 'https://stackconnect-r3qa.onrender.com/homepage/api/stackexchange/callback/'
     }
 
     response = requests.post(token_url, data=data)
@@ -90,7 +90,7 @@ def exchange_code_for_token(code):
         'client_id': os.getenv('CLIENT_ID'),
         'client_secret': os.getenv('CLIENT_SECRET'),
         'code': code,
-        'redirect_uri': "https://stackconnect-kdb4.onrender.com/stackexchange/callback/"
+        'redirect_uri': "https://stackconnect-r3qa.onrender.com/stackexchange/callback/"
     }
     response = requests.post(url, data=data)
     return response.json()
