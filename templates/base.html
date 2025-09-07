@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Q&A Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen w-full bg-[#D7E6E3] p-8 font-sans">
+
+    <div class="flex justify-between relative items-center mb-6">
+        <div class="flex justify-between">
+            <a href="{% url 'create_question' %}" class="inline-flex items-center mt-4 ml-10 px-2 py-2 bg-[#E8593A] text-white rounded hover:bg-[#24404E] hover:text-[#E8593A] transition font-semibold border border-black">
+                <span class=" relative mb-1 text-2xl mr-2 leading-none">+</span> Ask Question
+            </a>
+            <span id="countdown" class="inline-flex items-center mt-4 ml-6 px-2 py-2 min-w-50 bg-[#FAF7EC] text-[#E8593A] rounded hover:bg-[#24404E] hover:text-[#E8593A] transition font-semibold border border-black"></span>
+        </div>
+        <a href="https://github.com/ayu031201/StackConnect" target="_blank"><h1 class="text-4xl font-bold text-[#24404E] pr-20 mr-20 hover:text-[#E8593A]">StackConnect</h1></a>
+        <div class="flex items-center gap-4 relative pr-11">
+            <span class="text-[#24404E] font-medium">Hi, {{ user.display_name|safe }}</span>
+            <img src="{{ user.profile_image }}" alt="{{ user.display_name }}" 
+                class="w-8 h-8 rounded-full border-2 border-[#E8593A] cursor-pointer" 
+                id="profileDropdownButton" />
+                
+            <div class="relative">
+                <button onclick="document.getElementById('profileDropdownMenu').classList.toggle('hidden')" 
+                        class="px-2 py-1 bg-[#E8593A] text-white rounded-lg shadow text-sm focus:outline-none">
+                    ▼
+                </button>
+                <div id="profileDropdownMenu" class="absolute right-0 mt-2 w-40 bg-[#FAF7EC] border border-[#E8593A] rounded shadow-lg hidden z-10">
+                    <div class="px-4 py-2 font-mono text-black border-b border-[#E8593A]">
+                        Reputation: <span class="font-bold font-mono text-[#E8593A]">{{ user.reputation }}</span>
+                    </div>
+                    <a href="{% url 'logout' %}" 
+                    class="block px-4 py-2 font-mono text-black border-b border-[#E8593A] transition-colors rounded-b">
+                        Logout
+                    </a>
+                    <a href="https://github.com/ayu031201/StackConnect" target="_blank"
+                    class="block px-4 py-2 font-mono text-black transition-colors rounded-b">
+                        Github
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto w-full">
+        {% for q in questions %}
+            <div class="question-box bg-[#FAF7EC] border border-[#111111] rounded-xl p-6 mb-8 shadow-[0_4px_4px_rgba(0,0,0,1)] transition">
+                <div class="flex items-center">
+                    <a href="{{ q.question_link }}" target="_blank"
+                        class="question-title text-2xl mr-5 font-bold font-mono text-[#24404E] hover:text-[#E8593A] transition-colors">
+                        {{ q.title|safe }}
+                    </a>
+                    <span class="flex gap-2 ">
+                        {% for tag in q.tags.all|slice:":3" %}
+                        <span class="px-2 py-2 bg-[#E8593A] text-white font-mono rounded text-base border border-black hover:bg-[#24404E] transition leading-none">
+                            {{ tag.name }}
+                        </span>
+                        {% endfor %}
+                    </span>
+                </div>
+
+                <div class="question-content text-[#24404E] leading-relaxed mt-3 mb-5 font-mono">
+                    <span id="question-preview-{{ q.id }}">{{ q.body|safe|truncatewords:28 }}</span>
+                    <span id="question-full-{{ q.id }}" class="hidden">{{ q.body|safe }}</span>
+                </div>
+                
+                <div class="question-meta flex justify-between items-center text-sm mb-1">
+                    <div class="question-stats flex gap-4">
+                        <span class="px-3 py-1 bg-[#E8593A] text-white rounded font-mono hover:bg-[#24404E] transition border border-black">{{ q.score }} Votes</span>
+                        <span class="px-3 py-1 bg-[#E8593A] text-white rounded font-mono hover:bg-[#24404E] transition border border-black">{{ q.answer_count }} Answers</span>
+                        <span class="px-3 py-1 bg-[#E8593A] text-white rounded font-mono hover:bg-[#24404E] transition border border-black">{{ q.view_count }} Views</span>
+                        <span >
+                            <form method="POST" action="{% url 'upvote_question' q.id %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="px-3 py-1 bg-green-700 text-white rounded hover:bg-[#24404E] font-mono transition border border-black">
+                                Upvote
+                            </button>
+                            </form>
+                        </span>
+                        <a href="{% url 'create_answer' q.question_id %}" 
+                        class="px-3 py-1 bg-green-700 text-white rounded hover:bg-[#24404E] font-mono transition border border-black">
+                            Answer
+                        </a>
+                    </div>
+                    <div class="question-author font-mono flex items-center gap-2 text-[#24404E] ">
+                        Asked by
+                        <a href="{{q.profile_link}}" target="_blank" class="inline-flex font-mono items-center gap-2">
+                            <span class="author font-bold text-[#E8593A] text-lg"> {{q.author|safe}} </span>
+                            <img src="{{ q.profile_image }}" alt="User" class="w-8 h-8 rounded-full border-2 border-[#E8593A]" />
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex justify-center -mb-3 relative font-mono">
+                    <button type="button" class="expand-question-btn px-2 bg-[#E8593A] text-[#FAF7EC] rounded hover:bg-[#24404E] transition" data-question-id="{{ q.id }}">
+                            ▼
+                    </button>
+                </div>
+                
+                {% if q.answers.all %}
+                <div class="bg-[#FAF7EC] border-t border-[#111111] font-mono pt-2 mb-2 -mt-2 rounded-b-xl">
+                    
+                    <div class="text-lg font-bold text-[#E8593A] mb-2 mt-2 flex items-center justify-center">
+                       <span class="flex items-center"> Answers </span>
+                    </div>
+
+                    {% for answer in q.answers.all|slice:":1" %}
+                    <div class="answer-card bg-[#FAF7EC] border border-[#111111] rounded-xl p-4 mb-3 {% if answer.is_accepted %}border-2 border-[#24404E] bg-[#F7F8F9]{% endif %}">
+                        <div class="answer-meta flex items-center gap-3 mb-3">
+                            <span class="answer-score px-2 py-0.5 bg-[#E8593A] text-white rounded hover:bg-[#24404E] transition border border-black">
+                                {{ answer.score }} Upvotes
+                            </span>
+                            {% if answer.is_accepted %}
+                            <span class="accepted-badge px-2 py-0.5 bg-green-700 text-white rounded hover:bg-[#24404E] transition border border-black">
+                                Accepted
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="answer-body text-[#24404E] leading-relaxed mb-3 overflow-hidden">
+                            {{ answer.body|safe|truncatewords:200 }}
+                        </div>
+                        <div class="answer-author flex items-center gap-2 text-sm text-[#24404E]">
+                            <a href="{{answer.owner_profile_link}}" target="_blank" class="inline-flex items-center gap-2"> 
+                                <img src="{{ answer.owner_profile_image }}" alt="{{ answer.owner_display_name }}" class="w-8 h-8 rounded-full border border-[#E8593A]">
+                                <span class="font-bold text-[#E8593A] text-lg">{{ answer.owner_display_name }}</span>
+                            </a>
+                            <span class="px-2 py-1 bg-[#E8593A] text-white rounded hover:bg-[#24404E] transition border border-black">• {{ answer.created_at|date:"M d, Y" }}</span>
+                            <span class="px-2 py-1 bg-[#E8593A] text-white rounded hover:bg-[#24404E] transition border border-black">{{ answer.owner_reputation }} Reputation</span>
+                            <span class="">
+                                <form method="POST" action="{% url 'upvote_answer' answer.answer_id %}" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="border border-black px-2 py-1 bg-green-700 text-white rounded hover:bg-[#24404E] transition">
+                                        Upvote
+                                    </button>
+                                </form>
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div id="extra-answers-{{ q.id }}" class="hidden">
+                        {% for answer in q.answers.all|slice:"1:3" %}
+                        <div class="answer-card bg-[#FAF7EC] border border-[#111111] rounded-xl p-4 mb-3 overflow-hidden {% if answer.is_accepted %}border-2 border-[#24404E] bg-[#F7F8F9]{% endif %}">
+                            <div class="answer-meta flex items-center gap-3 mb-3">
+                                <span class="answer-score px-2 py-1 bg-[#24404E] text-white rounded hover:bg-[#E8593A] transition border border-black">
+                                    {{ answer.score }} Upvotes
+                                </span>
+                                {% if answer.is_accepted %}
+                                    <span class="accepted-badge px-2 py-0.5 bg-green-100 text-white rounded hover:bg-[#E8593A] transition border border-black">
+                                        Accepted
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <div class="answer-body text-[#24404E] leading-relaxed mb-3">
+                                {{ answer.body|safe|truncatewords:100 }}
+                            </div>
+                            <div class="answer-author flex items-center gap-2 text-sm text-[#24404E]">
+                                <a href="{{answer.owner_profile_link}}" target="_blank" class="inline-flex items-center gap-2"> 
+                                    <img src="{{ answer.owner_profile_image }}" alt="{{ answer.owner_display_name }}" class="w-8 h-8 rounded-full border border-[#E8593A]">
+                                    <span class="font-bold text-[#E8593A] text-lg">{{ answer.owner_display_name }}</span>
+                                </a>
+                                <span class="px-2 py-1 bg-[#E8593A] text-white rounded hover:bg-[#24404E] transition border border-black">• {{ answer.created_at|date:"M d, Y" }}</span>
+                                <span class="px-2 py-1 bg-[#E8593A] text-white rounded hover:bg-[#24404E] transition border border-black">{{ answer.owner_reputation }} Reputation</span>
+                                <span class="">
+                                    <form method="POST" action="{% url 'upvote_answer' answer.answer_id %}" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-2 py-1 bg-green-700 text-white rounded hover:bg-[#E8593A] transition border border-black">
+                                            Upvote
+                                        </button>
+                                    </form>
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if q.answers.count > 1 %}
+                    <div class="text-center -mb-9 relative font-mono">
+                        <button 
+                            data-question-id="{{ q.id }}"
+                            class="expand-answers-btn px-2 bg-[#E8593A] text-[#FAF7EC] rounded hover:bg-[#24404E] transition">
+                            ▼
+                        </button>
+                    </div>
+                {% endif %}
+                {% else %}
+                <div class="no-answers bg-[#D7E6E3] border-t border-[#E8593A] pt-4 mt-4 rounded-b-xl text-center text-[#24404E]">
+                    <p class="text-sm">No answers available yet.</p>
+                    <a href="{{ q.question_link }}" target="_blank" class="text-[#E8593A] hover:text-[#24404E] text-sm underline mt-1 inline-block">
+                        Be the first to answer on StackOverflow →
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="text-center text-[#E8593A] mt-10">
+                <p>No questions available.</p>
+            </div>
+            {% endfor %}
+
+
+        <div class="pagination flex justify-center gap-4 mt-8">
+            {% if questions.has_previous %}
+                <a href="?page={{ questions.previous_page_number }}" class="px-4 py-2 bg-[#E8593A] text-white rounded hover:bg-[#24404E] hover:text-white transition-colors shadow">Previous</a>
+            {% else %}
+                <span class="px-4 py-2 text-white bg-[#E8593A] rounded cursor-not-allowed">Previous</span>
+            {% endif %}
+            <span class="px-4 py-2 bg-[#FAF7EC] text-[#E8593A] rounded border border-[#E8593A]">Page {{ questions.number }} of {{ questions.paginator.num_pages }}</span>
+            {% if questions.has_next %}
+                <a href="?page={{ questions.next_page_number }}" class="px-4 py-2 bg-[#E8593A] text-white rounded hover:bg-[#24404E] hover:text-white transition-colors shadow">Next</a>
+            {% else %}
+                <span class="px-4 py-2 text-white bg-[#E8593A] rounded cursor-not-allowed">Next</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const expandButtons = document.querySelectorAll('button.expand-answers-btn');
+
+            expandButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                const questionId = this.dataset.questionId;
+                const extraAnswersDiv = document.getElementById(`extra-answers-${questionId}`);
+
+                if (!extraAnswersDiv) return;
+
+                extraAnswersDiv.classList.toggle('hidden');
+
+                if (extraAnswersDiv.classList.contains('hidden')) {
+                    this.textContent = '▼';
+                } else {
+                    this.textContent = '▲';
+                }
+                });
+            });
+
+            const buttons = document.querySelectorAll(".expand-question-btn");
+
+            buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const qId = button.dataset.questionId;
+                    const preview = document.getElementById("question-preview-" + qId);
+                    const full = document.getElementById("question-full-" + qId);
+
+                    if (preview.classList.contains("hidden")) {
+                        preview.classList.remove("hidden");
+                        full.classList.add("hidden");
+                        button.textContent = "▼";
+                    } 
+                    else {
+                    preview.classList.add("hidden");
+                    full.classList.remove("hidden");
+                    button.textContent = "▲";
+                    }
+                });
+            });
+
+            function updateCountdown() {
+                const now = new Date();
+                const nextMidnight = new Date();
+                nextMidnight.setHours(24, 0, 0, 0);  // 12:00 AM next day
+                const diffMs = nextMidnight - now;
+                const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+                const diffMin = Math.floor((diffMs / (1000 * 60)) % 60);
+                const diffSec = Math.floor((diffMs / 1000) % 60);
+                document.getElementById('countdown').textContent = `New Questions in ${diffHrs}h ${diffMin}m ${diffSec}s`;
+            }
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+        });
+    </script>
+
+</body>
+</html>
