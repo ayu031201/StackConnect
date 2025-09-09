@@ -8,7 +8,7 @@ def login(request):
         send_test_email(email)
         
         request.session['user_email'] = email
-        redirect_uri = "http://127.0.0.1:8000/homepage/api/stackexchange/callback/"
+        redirect_uri = "https://stackconnect-r3qa.onrender.com/homepage/api/stackexchange/callback/"
         client_id = os.getenv('CLIENT_ID')
         oauth_url = (
             f"https://stackoverflow.com/oauth?client_id={client_id}&scope=write_access&redirect_uri={redirect_uri}"
@@ -24,6 +24,7 @@ def login(request):
 
 def feedback(request):
     return render(request,'feedback.html')
+
 
 
 
